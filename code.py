@@ -36,12 +36,31 @@ def update_grid(grid, boundary="wrapping"):
                 new_grid[x, y] = 1
     return new_grid
 
+def save_grid(grid):
+    print("\nCopy the following grid state:")
+    print(repr(grid))
+
+def load_grid(grid_code):
+    return eval(grid_code)
+
 def run_game(rows, cols, steps, boundary="wrapping"):
     grid = initialize_grid(rows, cols)
     plt.ion()
-    for _ in range(steps):
+
+    for step in range(steps):
         plt.imshow(grid, cmap="binary")
         plt.pause(0.1)
+
+        user_input = input("Enter 's' to save, 'l' to load, or press Enter to continue: ")
+        if user_input == 's':
+            save_grid(grid)
+        elif user_input == 'l':
+            grid_code = input("Paste the grid state code here: ")
+            grid = load_grid(grid_code)
+
         grid = update_grid(grid, boundary)
+
     plt.ioff()
     plt.show()
+
+run_game(20, 20, 100, boundary="fixed")
