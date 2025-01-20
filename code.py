@@ -1,7 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def initialize_grid(rows, cols):
+def initialize_grid(rows, cols, custom_grid=None):
+    if custom_grid is not None:
+        # Validate the custom grid dimensions
+        if custom_grid.shape != (rows, cols):
+            raise ValueError("Custom grid dimensions do not match the specified rows and cols.")
+        return custom_grid
     return np.random.choice([0, 1], size=(rows, cols))
 
 def count_neighbors(grid, x, y, boundary="wrapping"):
@@ -43,8 +48,8 @@ def save_grid(grid):
 def load_grid(grid_code):
     return eval(grid_code)
 
-def run_game(rows, cols, steps, boundary="wrapping"):
-    grid = initialize_grid(rows, cols)
+def run_game(rows, cols, steps, boundary="wrapping", custom_grid=None):
+    grid = initialize_grid(rows, cols, custom_grid)
     plt.ion()
 
     for step in range(steps):
@@ -63,4 +68,11 @@ def run_game(rows, cols, steps, boundary="wrapping"):
     plt.ioff()
     plt.show()
 
-run_game(20, 20, 100, boundary="fixed")
+custom_grid_example = np.array([
+    [0, 1, 0, 0, 0],
+    [0, 0, 1, 0, 0],
+    [1, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0]
+])
+run_game(20, 20, 100, boundary="fixed", custom_grid=None)
